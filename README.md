@@ -1,8 +1,249 @@
-# Wan2.2 MCP Server
+# wan2.2 MCP 图像生成服务器
+本项目全部由AIIDE编写
+🎨 基于阿里云通义万相的 MCP (Model Context Protocol) 图像生成服务器，支持在 CherryStudio、VSCode、Cursor 等工具中直接使用文本生成图像功能。
 
-通义万相文生图MCP服务器 - 基于阿里云百炼API的Model Context Protocol (MCP) 服务器实现。
+## 🚀 快速开始（小白必看）
 
-## 功能特性
+### 第一步：下载和安装
+
+1. **下载项目**
+   ```bash
+   git clone <github项目地址>
+   cd wan2.2MCP
+   ```
+
+2. **安装依赖**
+   ```bash
+   npm install
+   ```
+
+3. **构建项目**
+   ```bash
+   npm run build
+   ```
+
+### 第二步：获取 API 密钥
+
+1. 访问 [阿里云DashScope控制台](https://bailian.console.aliyun.com)
+2. 注册/登录阿里云账号
+3. 开通「通义万相」服务
+4. 创建 API 密钥（格式：`sk-xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx`）
+5. 确保账户有足够余额（有赠送wan2.2-t2i-plus wan2.2-t2i-flash两种模型各100次）
+
+### 第三步：配置 API 密钥
+
+1. **复制配置模板**
+   ```bash
+   cp data/config.example.json data/config.json
+   ```
+
+2. **编辑配置文件**
+   打开 `data/config.json`，填入你的 API 密钥：
+   ```json
+   {
+     "api_key": "sk-你的真实API密钥",
+     "region": "cn-beijing",
+     "default_size": "1024*1024",
+     "default_style": "photography",
+     "default_quality": "standard"
+   }
+   ```
+
+3. **或使用 `set-config` 工具**：
+   通过MCP工具动态配置API密钥，无需手动编辑文件。直接和模型说我要将APIkey设置为sk-XXX，模型会自动将sk-XXX写入配置文件。
+
+
+
+## 使用方法
+
+### 启动服务器
+
+```bash
+npm start
+```
+
+看到以下输出表示启动成功：
+```
+[INFO] MCP Server started successfully
+[INFO] Listening on stdio
+```
+
+## 🔌 接入各种工具
+
+### CherryStudio 接入
+
+1. 打开 CherryStudio
+2. 进入设置 → MCP 服务器
+3. 添加新的服务器配置：
+
+```json
+{
+  "mcpServers": {
+    "wan2.2-image-generator": {
+      "command": "node",
+      "args": [
+        "C:\\Users\\用户名\\wan2.2MCP\\dist\\index.js"
+      ],
+      "cwd": "C:\\Users\\用户名\\wan2.2MCP"
+    }
+  }
+}
+```
+
+**⚠️ 重要提醒**：请将路径替换为你的实际项目路径！
+
+### VSCode 接入
+
+1. 安装 MCP 扩展
+2. 在 VSCode 设置中添加：
+
+```json
+{
+  "mcp.servers": {
+    "wan2.2-image-generator": {
+      "command": "node",
+      "args": [
+        "C:\\Users\\用户名\\wan2.2MCP\\dist\\index.js"
+      ],
+      "cwd": "C:\\Users\\用户名\\wan2.2MCP"
+    }
+  }
+}
+```
+
+### Cursor 接入
+
+1. 打开 Cursor 设置
+2. 找到 MCP 配置选项
+3. 添加服务器：
+
+```json
+{
+  "mcpServers": {
+    "wan2.2-image-generator": {
+      "command": "node",
+      "args": [
+        "C:\\Users\\用户名\\wan2.2MCP\\dist\\index.js"
+      ],
+      "cwd": "C:\\Users\\用户名\\wan2.2MCP"
+    }
+  }
+}
+```
+
+### 通用配置模板
+
+如果你使用其他支持 MCP 的工具，可以使用这个通用配置：
+
+```json
+{
+  "mcpServers": {
+    "wan2.2-image-generator": {
+      "command": "node",
+      "args": [
+        "/path/to/wan2.2MCP/dist/index.js"
+      ],
+      "cwd": "/path/to/wan2.2MCP"
+    }
+  }
+}
+```
+
+## 🎯 使用方法
+
+配置完成后，你就可以在对话中使用以下功能：
+
+### 生成图像
+
+直接在对话中说：
+- "帮我生成一张可爱小猫的图片"
+- "画一个科幻风格的机器人"
+- "生成一张1280x720的风景照片"
+- "用水彩风格画一朵玫瑰花"
+
+### 可用的图像风格
+
+- 📸 **photography** - 摄影风格
+- 🎭 **portrait** - 肖像风格  
+- 🎮 **3d cartoon** - 3D卡通
+- 🌸 **anime** - 动漫风格
+- 🎨 **oil painting** - 油画
+- 🌊 **watercolor** - 水彩
+- ✏️ **sketch** - 素描
+- 🖼️ **chinese painting** - 中国画
+- 📱 **flat illustration** - 扁平插画
+
+### 支持的图像尺寸
+
+- **1024×1024** - 方形图片
+- **720×1280** - 竖屏图片
+- **1280×720** - 横屏图片
+
+## 🛠️ 高级配置
+
+### 修改默认设置
+
+编辑 `data/config.json` 文件：
+
+```json
+{
+  "api_key": "你的API密钥",
+  "region": "cn-beijing",
+  "default_size": "1024*1024",     // 默认图片尺寸
+  "default_style": "photography",  // 默认图片风格
+  "default_quality": "standard"    // 默认图片质量 (standard/hd)
+}
+```
+
+### 查看生成历史
+
+所有生成的图片记录都保存在 `data/history.json` 文件中，包含：
+- 生成时间
+- 提示词
+- 图片参数
+- 图片URL
+
+## 🔧 故障排除
+
+### 常见问题
+
+**Q: 提示 "API key not configured"**
+
+A: 检查 `data/config.json` 文件是否存在且包含正确的 API 密钥
+
+**Q: 提示 "Request failed"**
+
+A: 检查网络连接和 API 密钥是否有效，确认阿里云账户余额充足
+
+**Q: 工具中找不到图像生成功能**
+
+A: 确认 MCP 服务器已正确启动，检查配置路径是否正确
+
+**Q: 生成的图片无法显示**
+
+A: 图片URL有时效性，建议及时保存到本地
+
+**Q: 路径配置错误**
+
+A: 确保使用绝对路径，Windows 系统注意使用双反斜杠 `\\`
+
+### 调试模式
+
+如果遇到问题，可以开启调试模式查看详细日志：
+
+```bash
+LOG_LEVEL=DEBUG npm start
+```
+
+### 测试连接
+
+运行测试脚本验证配置：
+
+```bash
+node test_mcp_functions.cjs
+```
+
+## 📋 功能特性
 
 - 🎨 **文本生成图像**: 支持中英文提示词，生成高质量图像
 - 🎭 **多种风格**: 支持摄影、插画、3D卡通、动漫、油画、水彩、素描等风格
@@ -13,271 +254,46 @@
 - 📝 **完善日志**: 详细的日志记录和错误处理
 - 🛡️ **错误处理**: 健壮的错误处理和恢复机制
 
-## 系统要求
+## 🔒 安全说明
 
-- Node.js 18.0.0 或更高版本
-- TypeScript 5.0 或更高版本
-- 阿里云DashScope API密钥
+- ⚠️ **请勿将 API 密钥提交到公共仓库**
+- 🔐 **定期更换 API 密钥**
+- 💰 **监控 API 使用量和费用**
+- 🚫 **不要在公共场所展示包含密钥的配置文件**
 
-## 安装
+## 📞 技术支持
 
-1. 克隆项目
-```bash
-git clone <repository-url>
-cd wan2.2MCP
-```
+如果遇到问题：
 
-2. 安装依赖
-```bash
-npm install
-```
+1. 📖 查看本文档的故障排除部分
+2. 🔍 检查项目的 `SECURITY.md` 文件
+3. 🧪 运行测试脚本验证配置
+4. 📝 查看详细的错误日志
 
-3. 构建项目
-```bash
-npm run build
-```
+## 🎓 使用示例
 
-## 配置
-
-### 环境变量
-
-创建 `.env` 文件（可选）：
-
-```env
-# 日志级别 (DEBUG, INFO, WARN, ERROR)
-LOG_LEVEL=INFO
-
-# 运行环境
-NODE_ENV=production
-```
-
-### API配置
-
-⚠️ **安全提醒**: 请勿将真实的API密钥提交到公共仓库！
-
-#### 配置方法
-
-1. **复制配置模板**：
-   ```bash
-   cp data/config.example.json data/config.json
-   ```
-
-2. **编辑配置文件**：
-   ```json
-   {
-     "api_key": "your-dashscope-api-key",
-     "region": "cn-beijing", 
-     "default_size": "1024*1024",
-     "default_style": "photography",
-     "default_quality": "standard"
-   }
-   ```
-
-3. **或使用 `set-config` 工具**：
-   通过MCP工具动态配置API密钥，无需手动编辑文件。
-
-#### 获取API密钥
-
-1. 访问 [阿里云DashScope控制台](https://dashscope.console.aliyun.com/)
-2. 创建API密钥
-3. 确保开通"通义万相"服务
-4. 将密钥配置到项目中
-
-## 使用方法
-
-### 启动服务器
-
-```bash
-# 开发模式
-npm run dev
-
-# 生产模式
-npm start
-```
-
-### MCP工具
-
-#### 1. generate-image - 生成图像
-
-```json
-{
-  "prompt": "一只可爱的小猫咪坐在花园里",
-  "size": "1024*1024",
-  "style": "photography",
-  "quality": "standard",
-  "n": 1
-}
-```
-
-**参数说明：**
-- `prompt` (必需): 图像描述文本，支持中英文
-- `size` (可选): 图像尺寸，支持的值：
-  - `1024*1024` (方形)
-  - `720*1280` (纵向)
-  - `1280*720` (横向)
-- `style` (可选): 图像风格，支持的值：
-  - `photography` (摄影)
-  - `portrait` (肖像)
-  - `3d cartoon` (3D卡通)
-  - `anime` (动漫)
-  - `oil painting` (油画)
-  - `watercolor` (水彩)
-  - `sketch` (素描)
-  - `chinese painting` (中国画)
-  - `flat illustration` (扁平插画)
-- `quality` (可选): 图像质量
-  - `standard` (标准)
-  - `hd` (高清)
-- `n` (可选): 生成图像数量 (1-4)
-
-#### 2. set-config - 设置配置
-
-```json
-{
-  "api_key": "your-api-key",
-  "region": "cn-beijing",
-  "default_size": "1024*1024",
-  "default_style": "photography"
-}
-```
-
-#### 3. get-config - 获取配置
-
-```json
-{}
-```
-
-#### 4. list-history - 获取历史记录
-
-```json
-{
-  "limit": 10,
-  "offset": 0,
-  "date_from": "2024-01-01T00:00:00.000Z",
-  "date_to": "2024-12-31T23:59:59.999Z"
-}
-```
-
-## 项目结构
+### 基本使用
 
 ```
-wan2.2MCP/
-├── src/
-│   ├── services/           # 服务层
-│   │   ├── ConfigService.ts    # 配置管理
-│   │   ├── HistoryService.ts   # 历史记录管理
-│   │   └── DashScopeClient.ts  # 阿里云API客户端
-│   ├── types/              # 类型定义
-│   │   └── index.ts
-│   ├── utils/              # 工具函数
-│   │   ├── logger.ts           # 日志记录
-│   │   └── errorHandler.ts     # 错误处理
-│   └── index.ts            # 主程序入口
-├── data/                   # 数据存储目录
-│   ├── config.json         # 配置文件
-│   └── history.json        # 历史记录文件
-├── dist/                   # 编译输出目录
-├── package.json
-├── tsconfig.json
-└── README.md
+用户: 帮我生成一张可爱的小猫图片
+AI: 我来为您生成一张可爱的小猫图片...
+[生成的图片URL]
 ```
 
-## 开发
-
-### 脚本命令
-
-```bash
-# 开发模式（监听文件变化）
-npm run dev
-
-# 构建项目
-npm run build
-
-# 启动生产版本
-npm start
-
-# 类型检查
-npm run type-check
-
-# 代码检查
-npm run lint
-```
-
-### 调试
-
-设置环境变量启用调试日志：
-
-```bash
-LOG_LEVEL=DEBUG npm run dev
-```
-
-## API参考
-
-### 阿里云DashScope API
-
-本项目使用阿里云DashScope的通义万相API。需要：
-
-1. 注册阿里云账号
-2. 开通DashScope服务
-3. 获取API密钥
-4. 确保账户有足够的调用额度
-
-### 支持的模型
-
-- **wan2.2-t2i-flash**: 通义万相2.2图像生成模型（快速）
-- **wan2.2-t2i-plus**: 通义万相2.2图像生成模型（Plus）
-
-## 错误处理
-
-服务器包含完善的错误处理机制：
-
-- **验证错误**: 参数格式或值不正确
-- **配置错误**: API密钥未设置或无效
-- **网络错误**: 网络连接问题
-- **API错误**: 阿里云API返回错误
-- **超时错误**: 任务执行超时
-- **文件错误**: 配置或历史文件读写错误
-
-所有错误都会记录详细日志，便于调试和监控。
-
-## 日志
-
-### 日志级别
-
-- `DEBUG`: 详细的调试信息
-- `INFO`: 一般信息
-- `WARN`: 警告信息
-- `ERROR`: 错误信息
-
-### 日志格式
+### 指定风格和尺寸
 
 ```
-2024-01-20T10:30:45.123Z INFO [ConfigService] Configuration loaded successfully
+用户: 用动漫风格生成一张1280x720的机器人图片
+AI: 我来为您生成一张动漫风格的机器人图片...
+[生成的图片URL]
 ```
 
-## 许可证
+## 📄 许可证
 
-MIT License
+MIT License - 详见 LICENSE 文件
 
-## 贡献
+---
 
-欢迎提交Issue和Pull Request！
+🎉 **恭喜！现在你可以在各种工具中愉快地使用 AI 图像生成功能了！**
 
-## 支持
-
-如果遇到问题，请：
-
-1. 检查日志输出
-2. 确认API密钥配置正确
-3. 验证网络连接
-4. 查看阿里云DashScope服务状态
-
-## 更新日志
-
-### v1.0.0
-
-- 初始版本发布
-- 支持通义万相文生图API
-- 完整的MCP协议实现
-- 配置管理和历史记录功能
-- 完善的错误处理和日志记录
+如果你觉得这个项目有用，请给个 ⭐ Star 支持一下！
