@@ -1,0 +1,8 @@
+{
+  "api_key": "your-dashscope-api-key-here",
+  "region": "cn-beijing",
+  "default_size": "1024*1024",
+  "default_style": "photography",
+  "default_quality": "standard",
+  "updated_at": "2025-01-01T00:00:00.000Z"
+}

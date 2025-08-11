@@ -78,7 +78,6 @@ export interface DashScopeImageResponse {
  */
 export interface GenerateImageParams {
   prompt: string;
-  model?: 'wanx-v1' | 'wan2.2-t2i-flash' | 'wan2.2-t2i-plus' | 'wanx2.1-t2i-turbo' | 'wanx2.0-t2i-turbo' | 'wanx2.1-t2i-plus';
   size?: string;
   style?: string;
   quality?: string;

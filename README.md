@@ -53,17 +53,35 @@ NODE_ENV=production
 
 ### API配置
 
-首次运行时，需要使用 `set-config` 工具配置阿里云API密钥：
+⚠️ **安全提醒**: 请勿将真实的API密钥提交到公共仓库！
 
-```json
-{
-  "api_key": "your-dashscope-api-key",
-  "region": "cn-beijing",
-  "default_size": "1024*1024",
-  "default_style": "photography",
-  "default_quality": "standard"
-}
-```
+#### 配置方法
+
+1. **复制配置模板**：
+   ```bash
+   cp data/config.example.json data/config.json
+   ```
+
+2. **编辑配置文件**：
+   ```json
+   {
+     "api_key": "your-dashscope-api-key",
+     "region": "cn-beijing", 
+     "default_size": "1024*1024",
+     "default_style": "photography",
+     "default_quality": "standard"
+   }
+   ```
+
+3. **或使用 `set-config` 工具**：
+   通过MCP工具动态配置API密钥，无需手动编辑文件。
+
+#### 获取API密钥
+
+1. 访问 [阿里云DashScope控制台](https://dashscope.console.aliyun.com/)
+2. 创建API密钥
+3. 确保开通"通义万相"服务
+4. 将密钥配置到项目中
 
 ## 使用方法
 

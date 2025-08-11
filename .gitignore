@@ -1,67 +1,57 @@
-# Dependencies
+# Copyright (c) 2025 菘蓝. All rights reserved.
+
+# 敏感信息和配置文件
+data/config.json
+.env
+.env.local
+.env.production
+.env.development
+
+# API密钥和认证文件
+*.key
+*.pem
+*.p12
+*.pfx
+auth.json
+credentials.json
+
+# Node.js 依赖
 node_modules/
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
+lerna-debug.log*
 
-# Build outputs
-dist/
-build/
-*.tsbuildinfo
-
-# Environment variables
-.env
-.env.local
-.env.development.local
-.env.test.local
-.env.production.local
-
-# Configuration files with sensitive data
-data/config.json
-
-# Logs
-logs/
-*.log
-
-# Runtime data
-pids
+# 运行时文件
 *.pid
 *.seed
 *.pid.lock
 
-# Coverage directory used by tools like istanbul
+# 覆盖率报告
 coverage/
-
-# nyc test coverage
+*.lcov
 .nyc_output
 
-# Dependency directories
-node_modules/
-jspm_packages/
+# 构建输出（保留dist用于发布）
+# dist/
+build/
+out/
 
-# Optional npm cache directory
-.npm
+# 缓存文件
+.cache/
+.parcel-cache/
+.next/
+.nuxt/
+.vuepress/dist
 
-# Optional REPL history
-.node_repl_history
-
-# Output of 'npm pack'
-*.tgz
-
-# Yarn Integrity file
-.yarn-integrity
-
-# dotenv environment variables file
-.env
-
-# IDE files
+# IDE 和编辑器文件
 .vscode/
 .idea/
 *.swp
 *.swo
 *~
 
-# OS generated files
+# 操作系统文件
 .DS_Store
 .DS_Store?
 ._*
@@ -70,19 +60,34 @@ jspm_packages/
 ehthumbs.db
 Thumbs.db
 
-# Temporary files
-*.tmp
-*.temp
+# 日志文件
+logs/
+*.log
 
-# History and database files
-data/history.json
-data/*.db
-data/*.sqlite
+# 临时文件
+tmp/
+temp/
+.tmp/
 
-# Test files
+# 测试文件
 test-results/
-*.test.js.map
+playwright-report/
+test-output/
 
-# Package manager lock files (optional, depending on preference)
-# package-lock.json
-# yarn.lock
+# 备份文件
+*.bak
+*.backup
+*.old
+
+# 历史记录文件（包含可能的敏感信息）
+data/history.json
+
+# 诊断和测试脚本生成的文件
+diagnose_*.js
+test_*.js
+debug_*.js
+
+# 用户特定配置
+.user.json
+user-config.json
+local-config.json
