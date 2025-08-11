@@ -85,7 +85,6 @@ export class HistoryService {
    */
   async createRecord(
     prompt: string,
-    model: string,
     size: string,
     style: string,
     quality: string,
@@ -96,7 +95,6 @@ export class HistoryService {
       const record: HistoryRecord = {
         id: uuidv4(),
         prompt,
-        model,
         size,
         style,
         quality,

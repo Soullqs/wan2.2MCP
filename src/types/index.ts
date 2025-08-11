@@ -9,7 +9,6 @@ export interface Config {
   default_size: string;
   default_style: string;
   default_quality: string;
-  default_model: string;
   updated_at: string;
 }
 
@@ -19,7 +18,6 @@ export interface Config {
 export interface HistoryRecord {
   id: string;
   prompt: string;
-  model: string;
   size: string;
   style: string;
   quality: string;
@@ -80,7 +78,7 @@ export interface DashScopeImageResponse {
  */
 export interface GenerateImageParams {
   prompt: string;
-  model?: string;
+  model?: 'wanx-v1' | 'wan2.2-t2i-flash' | 'wan2.2-t2i-plus' | 'wanx2.1-t2i-turbo' | 'wanx2.0-t2i-turbo' | 'wanx2.1-t2i-plus';
   size?: string;
   style?: string;
   quality?: string;
@@ -92,7 +90,6 @@ export interface SetConfigParams {
   region?: string;
   default_size?: string;
   default_style?: string;
-  default_model?: string;
 }
 
 export interface ListHistoryParams {
@@ -162,19 +159,6 @@ export const SUPPORTED_STYLES = [
  */
 export const SUPPORTED_QUALITIES = ['standard', 'hd'] as const;
 
-/**
- * 支持的模型
- */
-export const SUPPORTED_MODELS = [
-  'wan2.2-t2i-flash',
-  'wan2.2-t2i-plus',
-  'wanx2.1-t2i-turbo',
-  'wanx2.1-t2i-plus',
-  'wanx2.0-t2i-turbo',
-  'wanx-v1'
-] as const;
-
 export type ImageSize = typeof SUPPORTED_SIZES[number];
 export type ImageStyle = typeof SUPPORTED_STYLES[number];
 export type ImageQuality = typeof SUPPORTED_QUALITIES[number];
-export type ImageModel = typeof SUPPORTED_MODELS[number];

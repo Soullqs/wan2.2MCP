@@ -3,7 +3,6 @@ node_modules/
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
-pnpm-debug.log*
 
 # Build outputs
 dist/
@@ -17,12 +16,8 @@ build/
 .env.test.local
 .env.production.local
 
-# Data files (contains sensitive information)
-data/
-*.json
-!package.json
-!package-lock.json
-!tsconfig.json
+# Configuration files with sensitive data
+data/config.json
 
 # Logs
 logs/
@@ -36,19 +31,16 @@ pids
 
 # Coverage directory used by tools like istanbul
 coverage/
-*.lcov
 
 # nyc test coverage
 .nyc_output
 
 # Dependency directories
+node_modules/
 jspm_packages/
 
 # Optional npm cache directory
 .npm
-
-# Optional eslint cache
-.eslintcache
 
 # Optional REPL history
 .node_repl_history
@@ -59,25 +51,10 @@ jspm_packages/
 # Yarn Integrity file
 .yarn-integrity
 
-# parcel-bundler cache (https://parceljs.org/)
-.cache
-.parcel-cache
+# dotenv environment variables file
+.env
 
-# Next.js build output
-.next
-
-# Nuxt.js build / generate output
-.nuxt
-
-# Storybook build outputs
-.out
-.storybook-out
-
-# Temporary folders
-tmp/
-temp/
-
-# Editor directories and files
+# IDE files
 .vscode/
 .idea/
 *.swp
@@ -93,21 +70,19 @@ temp/
 ehthumbs.db
 Thumbs.db
 
+# Temporary files
+*.tmp
+*.temp
+
+# History and database files
+data/history.json
+data/*.db
+data/*.sqlite
+
 # Test files
-*test*
-*Test*
-*TEST*
-diagnose*
+test-results/
+*.test.js.map
 
-# Development files
-.trae/
-dev.*
-start.*
-
-# API keys and sensitive data
-*.key
-*.pem
-*.p12
-*.pfx
-config.json
-history.json
+# Package manager lock files (optional, depending on preference)
+# package-lock.json
+# yarn.lock

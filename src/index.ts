@@ -21,8 +21,7 @@ import type {
 import {
   SUPPORTED_SIZES,
   SUPPORTED_STYLES,
-  SUPPORTED_QUALITIES,
-  SUPPORTED_MODELS
+  SUPPORTED_QUALITIES
 } from './types/index.js';
 import { logger, LogLevel } from './utils/logger.js';
 
@@ -76,8 +75,8 @@ class Wan2MCPServer {
                 },
                 model: {
                   type: 'string',
-                  description: '使用的模型',
-                  enum: [...SUPPORTED_MODELS],
+                  description: '图像生成模型',
+                  enum: ['wanx-v1', 'wan2.2-t2i-flash', 'wan2.2-t2i-plus', 'wanx2.1-t2i-turbo', 'wanx2.0-t2i-turbo', 'wanx2.1-t2i-plus'],
                   default: 'wan2.2-t2i-flash',
                 },
                 size: {
@@ -135,11 +134,6 @@ class Wan2MCPServer {
                   description: '默认图像风格',
                   enum: [...SUPPORTED_STYLES],
                 },
-                default_model: {
-                  type: 'string',
-                  description: '默认模型',
-                  enum: [...SUPPORTED_MODELS],
-                },
               },
               required: ['api_key'],
             },
@@ -191,7 +185,7 @@ class Wan2MCPServer {
                 model: {
                   type: 'string',
                   description: '要测试的模型名称',
-                  enum: ['wanx-v1', 'wan2.2-t2i-flash', 'wanx2.1-t2i-turbo', 'wanx2.0-t2i-turbo', 'wanx2.1-t2i-plus'],
+                  enum: ['wanx-v1', 'wan2.2-t2i-flash', 'wan2.2-t2i-plus', 'wanx2.1-t2i-turbo', 'wanx2.0-t2i-turbo', 'wanx2.1-t2i-plus'],
                 },
               },
               required: ['model'],
@@ -297,7 +291,7 @@ class Wan2MCPServer {
     const config = this.configService.getConfig();
     const fullParams: GenerateImageParams = {
       prompt: params.prompt,
-      model: params.model || config.default_model,
+      model: params.model || 'wan2.2-t2i-flash',
       size: params.size || config.default_size,
       style: params.style || config.default_style,
       quality: params.quality || config.default_quality,
@@ -310,7 +304,7 @@ class Wan2MCPServer {
     try {
       // 调用DashScope API
       const dashScopeParams = {
-        model: fullParams.model! as any,
+        model: fullParams.model! as 'wanx-v1' | 'wan2.2-t2i-flash' | 'wan2.2-t2i-plus' | 'wanx2.1-t2i-turbo' | 'wanx2.0-t2i-turbo' | 'wanx2.1-t2i-plus',
         input: {
           prompt: fullParams.prompt
         },
@@ -325,7 +319,6 @@ class Wan2MCPServer {
       // 创建历史记录
       historyRecord = await this.historyService.createRecord(
         fullParams.prompt,
-        fullParams.model!,
         fullParams.size!,
         fullParams.style!,
         fullParams.quality!,
@@ -400,7 +393,6 @@ class Wan2MCPServer {
                 `Default Size: ${updatedConfig.default_size}\n` +
                 `Default Style: ${updatedConfig.default_style}\n` +
                 `Default Quality: ${updatedConfig.default_quality}\n` +
-                `Default Model: ${updatedConfig.default_model}\n` +
                 `Updated: ${updatedConfig.updated_at}`,
         },
       ],
@@ -423,7 +415,6 @@ class Wan2MCPServer {
                 `Default Size: ${config.default_size}\n` +
                 `Default Style: ${config.default_style}\n` +
                 `Default Quality: ${config.default_quality}\n` +
-                `Default Model: ${config.default_model}\n` +
                 `Last Updated: ${config.updated_at}`,
         },
       ],
@@ -439,7 +430,7 @@ class Wan2MCPServer {
 
     const recordsText = history.records.map((record, index) => 
       `${index + 1}. [${record.status.toUpperCase()}] ${record.prompt.substring(0, 50)}${record.prompt.length > 50 ? '...' : ''}\n` +
-      `   Model: ${record.model} | Style: ${record.style} | Size: ${record.size} | Quality: ${record.quality}\n` +
+      `   Style: ${record.style} | Size: ${record.size} | Quality: ${record.quality}\n` +
       `   Created: ${new Date(record.created_at).toLocaleString()}\n` +
       `   Images: ${record.image_urls.length} | Task ID: ${record.task_id}\n` +
       (record.error_message ? `   Error: ${record.error_message}\n` : '')
@@ -480,7 +471,7 @@ class Wan2MCPServer {
       this.dashScopeClient = new DashScopeClient(config.api_key, config.region);
     }
 
-    const model = params.model as 'wanx-v1' | 'wan2.2-t2i-flash' | 'wanx2.1-t2i-turbo' | 'wanx2.0-t2i-turbo' | 'wanx2.1-t2i-plus';
+    const model = params.model as 'wanx-v1' | 'wan2.2-t2i-flash' | 'wan2.2-t2i-plus' | 'wanx2.1-t2i-turbo' | 'wanx2.0-t2i-turbo' | 'wanx2.1-t2i-plus';
     
     try {
       const result = await this.dashScopeClient.testModel(model);

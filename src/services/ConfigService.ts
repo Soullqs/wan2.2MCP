@@ -1,7 +1,7 @@
 import { promises as fs } from 'fs';
 import { join } from 'path';
 import type { Config, SetConfigParams } from '../types/index.js';
-import { MCPError, SUPPORTED_MODELS } from '../types/index.js';
+import { MCPError } from '../types/index.js';
 import { logger } from '../utils/logger.js';
 
 /**
@@ -55,7 +55,6 @@ export class ConfigService {
       default_size: '1024*1024',
       default_style: 'photography',
       default_quality: 'standard',
-      default_model: 'wan2.2-t2i-flash',
       updated_at: new Date().toISOString()
     };
 
@@ -142,7 +141,6 @@ export class ConfigService {
         region: params.region || this.config.region,
         default_size: params.default_size || this.config.default_size,
         default_style: params.default_style || this.config.default_style,
-        default_model: params.default_model || this.config.default_model,
         updated_at: new Date().toISOString()
       };
 
@@ -199,14 +197,6 @@ export class ConfigService {
       throw new MCPError(
         `Invalid quality: ${config.default_quality}. Supported qualities: ${validQualities.join(', ')}`,
         'INVALID_QUALITY'
-      );
-    }
-
-    // 验证模型
-    if (!SUPPORTED_MODELS.includes(config.default_model as any)) {
-      throw new MCPError(
-        `Invalid model: ${config.default_model}. Supported models: ${SUPPORTED_MODELS.join(', ')}`,
-        'INVALID_MODEL'
       );
     }
   }

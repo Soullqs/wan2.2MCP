@@ -1,97 +1,89 @@
-# 通义万相 MCP 服务器
-声明：本人变成小白，除此行外均为AI生成，仅用于学习和研究，不用于商业用途。
-## 项目介绍
-一个基于阿里云百炼API的文本到图像生成MCP（Model Context Protocol）服务器，支持多种AI模型进行图像生成。
+# Wan2.2 MCP Server
+
+通义万相文生图MCP服务器 - 基于阿里云百炼API的Model Context Protocol (MCP) 服务器实现。
 
 ## 功能特性
 
-- 🎨 **多模型支持**：支持wan2.2-t2i-flash、wan2.2-t2i-plus等多种通义万相模型
-- ⚡ **快速生成**：基于阿里云百炼API，提供高效的图像生成服务
-- 🔧 **灵活配置**：支持自定义图像尺寸、风格、质量等参数
-- 📝 **历史记录**：自动保存生成历史，支持查询和管理
-- 🛠️ **MCP标准**：完全兼容Model Context Protocol标准
-- 🌐 **多区域支持**：支持阿里云不同区域的API端点
+- 🎨 **文本生成图像**: 支持中英文提示词，生成高质量图像
+- 🎭 **多种风格**: 支持摄影、插画、3D卡通、动漫、油画、水彩、素描等风格
+- � **多种尺寸**: 支持方形、横向、纵向等多种图像尺寸
+- ⚙️ **配置管理**: 灵活的API配置和默认参数设置
+- � **历史记录**: 完整的生成历史记录和统计信息
+- � **任务跟踪**: 实时任务状态查询和自动等待完成
+- � **完善日志**: 详细的日志记录和错误处理
+- �️ **错误处理**: 健壮的错误处理和恢复机制
 
-## 支持的模型
+## 系统要求
 
-- `wan2.2-t2i-flash` - 快速生成模型（默认）
-- `wan2.2-t2i-plus` - 高质量生成模型
-- `wanx2.1-t2i-turbo` - 快速生成模型
-- `wanx2.1-t2i-plus` - 高质量生成模型
-- `wanx2.0-t2i-turbo` - 快速生成模型
-- `wanx-v1` - 基础模型
+- Node.js 18.0.0 或更高版本
+- TypeScript 5.0 或更高版本
+- 阿里云DashScope API密钥
 
-## 安装要求
+## 安装
 
-- Node.js >= 18.0.0
-- npm 或 yarn
-- 阿里云百炼API密钥
-
-## 快速开始
-
-### 1. 克隆项目
-
+1. 克隆项目
 ```bash
 git clone <repository-url>
 cd wan2.2MCP
 ```
 
-### 2. 安装依赖
-
+2. 安装依赖
 ```bash
 npm install
 ```
 
-### 3. 构建项目
-
+3. 构建项目
 ```bash
 npm run build
 ```
 
-### 4. 配置API密钥
+## 配置
 
-首次运行时，系统会自动创建配置文件。你需要设置阿里云百炼API密钥：
+### 环境变量
 
-```bash
-# 启动服务器
-npm start
+创建 `.env` 文件（可选）：
+
+```env
+# 日志级别 (DEBUG, INFO, WARN, ERROR)
+LOG_LEVEL=INFO
+
+# 运行环境
+NODE_ENV=production
 ```
 
-然后使用MCP客户端调用 `set-config` 工具设置API密钥：
+### API配置
+
+首次运行时，需要使用 `set-config` 工具配置阿里云API密钥：
 
 ```json
 {
   "api_key": "your-dashscope-api-key",
   "region": "cn-beijing",
-  "default_model": "wan2.2-t2i-flash"
+  "default_size": "1024*1024",
+  "default_style": "photography",
+  "default_quality": "standard"
 }
 ```
 
-### 5. 获取阿里云百炼API密钥
+## 使用方法
 
-1. 访问 [阿里云百炼控制台](https://dashscope.console.aliyun.com/)
-2. 登录你的阿里云账号
-3. 在API-KEY管理页面创建新的API密钥
-4. 复制生成的API密钥用于配置
+### 启动服务器
 
-## MCP工具说明
+```bash
+# 开发模式
+npm run dev
 
-### generate-image
-生成图像的主要工具
+# 生产模式
+npm start
+```
 
-**参数：**
-- `prompt` (必需): 图像描述文本
-- `model` (可选): 使用的模型，默认为配置中的默认模型
-- `size` (可选): 图像尺寸，默认为配置中的默认尺寸
-- `style` (可选): 图像风格，默认为配置中的默认风格
-- `quality` (可选): 图像质量，默认为配置中的默认质量
-- `n` (可选): 生成图像数量，默认为1
+### MCP工具
 
-**示例：**
+#### 1. generate-image - 生成图像
+
 ```json
 {
-  "prompt": "一只可爱的橘猫在阳光下睡觉",
-  "model": "wan2.2-t2i-flash",
+  "prompt": "一只可爱的小猫咪坐在花园里",
   "size": "1024*1024",
   "style": "photography",
   "quality": "standard",
@@ -99,157 +91,149 @@ npm start
 }
 ```
 
-### set-config
-设置服务器配置
+**参数说明：**
+- `prompt` (必需): 图像描述文本，支持中英文
+- `size` (可选): 图像尺寸，支持的值：
+  - `1024*1024` (方形)
+  - `720*1280` (纵向)
+  - `1280*720` (横向)
+- `style` (可选): 图像风格，支持的值：
+  - `photography` (摄影)
+  - `portrait` (肖像)
+  - `3d cartoon` (3D卡通)
+  - `anime` (动漫)
+  - `oil painting` (油画)
+  - `watercolor` (水彩)
+  - `sketch` (素描)
+  - `chinese painting` (中国画)
+  - `flat illustration` (扁平插画)
+- `quality` (可选): 图像质量
+  - `standard` (标准)
+  - `hd` (高清)
+- `n` (可选): 生成图像数量 (1-4)
 
-**参数：**
-- `api_key` (可选): 阿里云百炼API密钥
-- `region` (可选): API区域
-- `default_size` (可选): 默认图像尺寸
-- `default_style` (可选): 默认图像风格
-- `default_quality` (可选): 默认图像质量
-- `default_model` (可选): 默认使用的模型
-
-### get-config
-获取当前配置信息
-
-### list-history
-查看图像生成历史记录
-
-**参数：**
-- `limit` (可选): 返回记录数量限制
-- `offset` (可选): 记录偏移量
-- `date_from` (可选): 开始日期过滤
-- `date_to` (可选): 结束日期过滤
-
-### test-model
-测试模型连接状态
-
-### diagnose-api
-诊断API连接问题
-
-## 配置选项
-
-### 支持的图像尺寸
-- `1024*1024` (默认)
-- `720*1280`
-- `1280*720`
-- `1024*576`
-- `576*1024`
-
-### 支持的图像风格
-- `photography` (摄影风格，默认)
-- `portrait` (肖像风格)
-- `3d cartoon` (3D卡通风格)
-- `anime` (动漫风格)
-- `oil painting` (油画风格)
-- `watercolor` (水彩风格)
-- `sketch` (素描风格)
-- `chinese painting` (中国画风格)
-- `flat illustration` (扁平插画风格)
-
-### 支持的图像质量
-- `standard` (标准质量，默认)
-- `hd` (高清质量)
-
-### 支持的区域
-- `cn-beijing` (北京，默认)
-- `cn-shanghai` (上海)
-- `cn-shenzhen` (深圳)
-- `cn-hangzhou` (杭州)
-- `cn-wulanchabu` (乌兰察布)
-- `ap-southeast-1` (新加坡)
-- `us-east-1` (美国东部)
-
-## 在MCP客户端中使用
-
-### Claude Desktop配置
-
-在Claude Desktop的配置文件中添加：
+#### 2. set-config - 设置配置
 
 ```json
 {
-  "mcpServers": {
-    "wan2.2-mcp": {
-      "command": "node",
-      "args": ["/path/to/wan2.2MCP/dist/index.js"],
-      "env": {}
-    }
-  }
+  "api_key": "your-api-key",
+  "region": "cn-beijing",
+  "default_size": "1024*1024",
+  "default_style": "photography"
 }
 ```
 
-### 其他MCP客户端
+#### 3. get-config - 获取配置
 
-确保你的MCP客户端支持stdio传输方式，然后配置服务器路径为构建后的 `dist/index.js` 文件。
-
-## 开发
-
-### 开发模式运行
-
-```bash
-npm run dev
+```json
+{}
 ```
 
-### 代码检查
+#### 4. list-history - 获取历史记录
 
-```bash
-npm run lint
-```
-
-### 清理构建文件
-
-```bash
-npm run clean
+```json
+{
+  "limit": 10,
+  "offset": 0,
+  "date_from": "2024-01-01T00:00:00.000Z",
+  "date_to": "2024-12-31T23:59:59.999Z"
+}
 ```
 
 ## 项目结构
 
 ```
 wan2.2MCP/
-├── src/                    # 源代码目录
-│   ├── index.ts           # 主服务器文件
-│   ├── services/          # 服务层
-│   │   ├── ConfigService.ts
-│   │   └── HistoryService.ts
-│   └── types/             # 类型定义
-│       └── index.ts
-├── data/                  # 数据文件目录
-│   ├── config.json        # 配置文件
-│   └── history.json       # 历史记录文件
-├── dist/                  # 构建输出目录
-├── package.json           # 项目配置
-├── tsconfig.json          # TypeScript配置
-└── README.md              # 项目说明
+├── src/
+│   ├── services/           # 服务层
+│   │   ├── ConfigService.ts    # 配置管理
+│   │   ├── HistoryService.ts   # 历史记录管理
+│   │   └── DashScopeClient.ts  # 阿里云API客户端
+│   ├── types/              # 类型定义
+│   │   └── index.ts
+│   ├── utils/              # 工具函数
+│   │   ├── logger.ts           # 日志记录
+│   │   └── errorHandler.ts     # 错误处理
+│   └── index.ts            # 主程序入口
+├── data/                   # 数据存储目录
+│   ├── config.json         # 配置文件
+│   └── history.json        # 历史记录文件
+├── dist/                   # 编译输出目录
+├── package.json
+├── tsconfig.json
+└── README.md
 ```
 
-## 故障排除
+## 开发
 
-### 常见问题
+### 脚本命令
 
-1. **API密钥错误**
-   - 确保API密钥正确且有效
-   - 检查API密钥是否有足够的权限
-   - 确认账户余额充足
+```bash
+# 开发模式（监听文件变化）
+npm run dev
 
-2. **网络连接问题**
-   - 检查网络连接
-   - 确认防火墙设置
-   - 尝试不同的区域设置
+# 构建项目
+npm run build
 
-3. **模型不可用**
-   - 确认所选模型在当前区域可用
-   - 检查模型名称是否正确
-   - 尝试使用默认模型
+# 启动生产版本
+npm start
 
-### 调试模式
+# 类型检查
+npm run type-check
 
-使用 `diagnose-api` 工具可以帮助诊断API连接问题：
+# 代码检查
+npm run lint
+```
 
-```json
-{
-  "tool": "diagnose-api"
-}
+### 调试
+
+设置环境变量启用调试日志：
+
+```bash
+LOG_LEVEL=DEBUG npm run dev
+```
+
+## API参考
+
+### 阿里云DashScope API
+
+本项目使用阿里云DashScope的通义万相API。需要：
+
+1. 注册阿里云账号
+2. 开通DashScope服务
+3. 获取API密钥
+4. 确保账户有足够的调用额度
+
+### 支持的模型
+
+- **wanx-v1**: 通义万相文生图模型
+
+## 错误处理
+
+服务器包含完善的错误处理机制：
+
+- **验证错误**: 参数格式或值不正确
+- **配置错误**: API密钥未设置或无效
+- **网络错误**: 网络连接问题
+- **API错误**: 阿里云API返回错误
+- **超时错误**: 任务执行超时
+- **文件错误**: 配置或历史文件读写错误
+
+所有错误都会记录详细日志，便于调试和监控。
+
+## 日志
+
+### 日志级别
+
+- `DEBUG`: 详细的调试信息
+- `INFO`: 一般信息
+- `WARN`: 警告信息
+- `ERROR`: 错误信息
+
+### 日志格式
+
+```
+2024-01-20T10:30:45.123Z INFO [ConfigService] Configuration loaded successfully
 ```
 
 ## 许可证
@@ -258,12 +242,23 @@ MIT License
 
 ## 贡献
 
-欢迎提交Issue和Pull Request来改进这个项目。
+欢迎提交Issue和Pull Request！
+
+## 支持
+
+如果遇到问题，请：
+
+1. 检查日志输出
+2. 确认API密钥配置正确
+3. 验证网络连接
+4. 查看阿里云DashScope服务状态
 
 ## 更新日志
 
 ### v1.0.0
+
 - 初始版本发布
-- 支持多种通义万相模型
-- 完整的MCP协议支持
+- 支持通义万相文生图API
+- 完整的MCP协议实现
 - 配置管理和历史记录功能
+- 完善的错误处理和日志记录
