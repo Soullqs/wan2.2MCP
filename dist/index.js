@@ -49,12 +49,6 @@ class Wan2MCPServer {
                                     type: 'string',
                                     description: '图像描述文本，支持中英文',
                                 },
-                                model: {
-                                    type: 'string',
-                                    description: '图像生成模型',
-                                    enum: ['wanx-v1', 'wan2.2-t2i-flash', 'wan2.2-t2i-plus', 'wanx2.1-t2i-turbo', 'wanx2.0-t2i-turbo', 'wanx2.1-t2i-plus'],
-                                    default: 'wan2.2-t2i-flash',
-                                },
                                 size: {
                                     type: 'string',
                                     description: '图像尺寸',
@@ -161,7 +155,7 @@ class Wan2MCPServer {
                                 model: {
                                     type: 'string',
                                     description: '要测试的模型名称',
-                                    enum: ['wanx-v1', 'wan2.2-t2i-flash', 'wan2.2-t2i-plus', 'wanx2.1-t2i-turbo', 'wanx2.0-t2i-turbo', 'wanx2.1-t2i-plus'],
+                                    enum: ['wanx-v1', 'wan2.2-t2i-flash', 'wanx2.1-t2i-turbo', 'wanx2.0-t2i-turbo', 'wanx2.1-t2i-plus'],
                                 },
                             },
                             required: ['model'],
@@ -246,7 +240,6 @@ class Wan2MCPServer {
         const config = this.configService.getConfig();
         const fullParams = {
             prompt: params.prompt,
-            model: params.model || 'wan2.2-t2i-flash',
             size: params.size || config.default_size,
             style: params.style || config.default_style,
             quality: params.quality || config.default_quality,
@@ -257,7 +250,7 @@ class Wan2MCPServer {
         try {
             // 调用DashScope API
             const dashScopeParams = {
-                model: fullParams.model,
+                model: 'wan2.2-t2i-flash',
                 input: {
                     prompt: fullParams.prompt
                 },
@@ -285,7 +278,6 @@ class Wan2MCPServer {
                         type: 'text',
                         text: `Successfully generated ${imageUrls.length} image(s):\n\n` +
                             `Prompt: ${fullParams.prompt}\n` +
-                            `Model: ${fullParams.model}\n` +
                             `Style: ${fullParams.style}\n` +
                             `Size: ${fullParams.size}\n` +
                             `Quality: ${fullParams.quality}\n` +

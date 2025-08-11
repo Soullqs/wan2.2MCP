@@ -196,7 +196,7 @@ export class DashScopeClient {
 
     try {
       const response: AxiosResponse<DashScopeImageResponse> = await this.client.get(
-        `/api/v1/services/aigc/text2image/image-synthesis/${taskId}`
+        `/api/v1/tasks/${taskId}`
       );
 
       const result = response.data;

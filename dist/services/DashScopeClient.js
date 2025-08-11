@@ -130,7 +130,7 @@ export class DashScopeClient {
     async getTaskStatus(taskId) {
         logger.debug('Checking task status', 'DashScopeClient', { taskId });
         try {
-            const response = await this.client.get(`/api/v1/services/aigc/text2image/image-synthesis/${taskId}`);
+            const response = await this.client.get(`/api/v1/tasks/${taskId}`);
             const result = response.data;
             logger.debug('Task status retrieved', 'DashScopeClient', {
                 task_id: result.output.task_id,
